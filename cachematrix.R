@@ -4,8 +4,6 @@
  ##it again, it can be looked up in the cache rather than recomputed.
 
 
-
-
 ##makeCacheMatrix: This function creates a special "matrix" object that can cache its inverse.
 makeCacheMatrix <- function(x = matrix()) {
         m<-NULL
@@ -36,12 +34,42 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
         inver<-x$getinverse()
+        #checks whether the inverse exists in cache or not 
         if(!is.null(inver)){
                 message("getting cached data")
                 return(inver)
         }
+        #if inverse doesn't exist in cache then it creates the cache of inverse of matrix x
         data<-x$getcache()
+        #solve() function creates the inverse of matrix
         inver<-solve(data)
         x$setinverse(inver)
         inver
 }
+##Using above functions
+##first of all load the functins
+#    source("makeCacheMatrix.R")
+#    source("cacheSolve.R")
+##now create a matrix
+#    mat<-matrix(c(1,2,3,5,7,9,4,6,2),3,3)
+##this creates a list named "matrix"
+#    matrix<-makeCacheMatrix(mat)
+##Now to diplay the cache stored,type
+#    matrix$getcache()
+#        [,1] [,2] [,3]
+#   [1,]    1    5    4
+#   [2,]    2    7    6
+#   [3,]    3    9    2
+##Now apply cacheSolve function on c
+#    cacheSolve(c)
+#            [,1]       [,2]       [,3]
+#   [1,] -2.2222222  1.4444444  0.1111111
+#   [2,]  0.7777778 -0.5555556  0.1111111
+#   [3,] -0.1666667  0.3333333 -0.1666667
+##On apply cacheSolve function again we can see that now we are getting the cached data of inverse of matrix
+#    cacheSolve(c)
+#   getting cached data
+#           [,1]       [,2]       [,3]
+#   [1,] -2.2222222  1.4444444  0.1111111
+#   [2,]  0.7777778 -0.5555556  0.1111111
+#   [3,] -0.1666667  0.3333333 -0.1666667
